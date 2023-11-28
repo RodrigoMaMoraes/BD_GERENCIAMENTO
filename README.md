@@ -1,5 +1,8 @@
 # BD_GERENCIAMENTO
 
+## ETAPA 1 -
+-- Criação da tabela CLIENTES--
+
 CREATE TABLE CLIENTES (
     ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     NOME VARCHAR(123),
@@ -8,9 +11,13 @@ CREATE TABLE CLIENTES (
     ENDERECO VARCHAR(123)
 );
 
+-- Inserção de dados na tabela CLIENTES--
+
 INSERT INTO CLIENTES (NOME, EMAIL, TELEFONE, ENDERECO) VALUES ('PEDRO', 'PEDRO@GMAIL.COM', '123123', 'RUA DA CRUZ'),
     ('TIAGO', 'JOAO@GMAIL.COM', '321321', 'RUA BARCO AFUNDADO'),
     ('JHON', 'JHON@GMAIL.COM', '777999', 'RUA SOBRE AS AGUAS');
+
+-- Criação da tabela PEDIDOS--
 
 CREATE TABLE PEDIDOS (
     ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -20,11 +27,17 @@ CREATE TABLE PEDIDOS (
     FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTES(ID)
 );
 
+-- Inserção de dados na tabela PEDIDOS--
+
 INSERT INTO PEDIDOS (DATA_PEDIDO, VALOR, CLIENTE_ID) VALUES ('2022-10-10', 50.50, 1),
     ('2023-12-12', 50.50, 2),
     ('2024-11-11', 50.50, 3);
 
+-- Definição do delimitador para a criação de procedimentos armazenados--
+
 DELIMITER $$
+
+-- Criação de um procedimento armazenado para inserção de pedidos--
 
 CREATE PROCEDURE INSEPEDIDO(
     IN CLIENTE_ID INT,
@@ -35,15 +48,27 @@ BEGIN
     INSERT INTO PEDIDOS(CLIENTE_ID, DATA_PEDIDO, VALOR) VALUES (CLIENTE_ID, DATA_PEDIDO, VALOR);
 END$$
 
+-- Restauração do delimitador padrão--
+
 DELIMITER ;
+
+-- Chamada do procedimento armazenado para inserir um novo pedido --
 
 CALL INSEPEDIDO(5, '2024-05-05', 120.00);
 
+-- Consulta todos os registros da tabela PEDIDOS --
+
 SELECT * FROM PEDIDOS;
+
+-- Adição de uma nova coluna (TOTALPEDIDOS) à tabela CLIENTES --
 
 ALTER TABLE CLIENTES ADD TOTALPEDIDOS DECIMAL(10, 2);
 
+-- Definição do delimitador para a criação de gatilhos--
+
 DELIMITER $$
+
+-- Criação de um gatilho para atualização do total de pedidos após inserção em PEDIDOS --
 CREATE TRIGGER ATUALIZATOTALPEDIDOS 
 AFTER INSERT ON PEDIDOS
 FOR EACH ROW
@@ -52,12 +77,18 @@ BEGIN
     SET TOTALPEDIDOS = TOTALPEDIDOS + NEW.VALOR
     WHERE ID = NEW.CLIENTE_ID;
 END$$
+-- Restauração do delimitador padrão --
+
 DELIMITER ;
+
+-- Inserção de um novo pedido e consulta de todos os registros da tabela CLIENTES --
 
 INSERT INTO PEDIDOS (CLIENTE_ID, DATA_PEDIDO, VALOR)
 VALUES (2, '2021-03-12', 80.00);
 
 SELECT * FROM CLIENTES;
+
+-- Criação de uma visão chamada PEDIDOSCLIENTES --
 
 CREATE VIEW PEDIDOSCLIENTES AS
 SELECT 
@@ -68,5 +99,7 @@ SELECT
 FROM CLIENTES
 INNER JOIN PEDIDOS
 ON CLIENTES.ID = PEDIDOS.CLIENTE_ID;
+
+-- Consulta utilizando a visão PEDIDOSCLIENTES--
 
 SELECT * FROM CLIENTES INNER JOIN PEDIDOSCLIENTES ON CLIENTES.ID = PEDIDOSCLIENTES.CLIENTE_ID;
