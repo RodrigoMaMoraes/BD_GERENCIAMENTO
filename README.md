@@ -33,6 +33,8 @@ INSERT INTO PEDIDOS (DATA_PEDIDO, VALOR, CLIENTE_ID) VALUES ('2022-10-10', 50.50
     ('2023-12-12', 50.50, 2),
     ('2024-11-11', 50.50, 3);
 
+
+## ETAPA 2 -
 -- Definição do delimitador para a criação de procedimentos armazenados--
 
 DELIMITER $$
@@ -59,6 +61,8 @@ CALL INSEPEDIDO(5, '2024-05-05', 120.00);
 -- Consulta todos os registros da tabela PEDIDOS --
 
 SELECT * FROM PEDIDOS;
+
+## ETAPA 3 -
 
 -- Adição de uma nova coluna (TOTALPEDIDOS) à tabela CLIENTES --
 
@@ -88,6 +92,8 @@ VALUES (2, '2021-03-12', 80.00);
 
 SELECT * FROM CLIENTES;
 
+## ETAPA 4 -
+
 -- Criação de uma visão chamada PEDIDOSCLIENTES --
 
 CREATE VIEW PEDIDOSCLIENTES AS
@@ -100,6 +106,7 @@ FROM CLIENTES
 INNER JOIN PEDIDOS
 ON CLIENTES.ID = PEDIDOS.CLIENTE_ID;
 
+## ETAPA 5 -
 -- Consulta utilizando a visão PEDIDOSCLIENTES--
 
 SELECT * FROM CLIENTES INNER JOIN PEDIDOSCLIENTES ON CLIENTES.ID = PEDIDOSCLIENTES.CLIENTE_ID;
